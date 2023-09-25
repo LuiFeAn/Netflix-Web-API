@@ -18,4 +18,12 @@ export class GetNetFlixMoviesDTO {
     })
     readonly password: string
 
+    @IsNotEmpty({
+        message:'Informe o perfil'
+    })
+    @IsString({
+        message:'Informe uma string'
+    })
+    readonly profile: string
+
 }
