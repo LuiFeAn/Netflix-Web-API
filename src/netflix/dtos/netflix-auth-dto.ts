@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
 
-export class GetNetFlixMoviesDTO {
+export class NetflixAuthDto {
 
     @IsNotEmpty({
         message:'Informe seu email'

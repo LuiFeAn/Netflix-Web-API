@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { GetNetFlixMoviesDTO } from 'src/netflix/dtos/get-netflix-movies-dto';
+import { NetflixAuthDto } from 'src/netflix/dtos/netflix-auth-dto';
 import puppeteer from 'puppeteer';
 import { PageInMemoryRepository } from 'src/repositories/page-in-memory-repository';
 
@@ -8,7 +8,7 @@ export class PuppeteerService {
 
     constructor(private readonly pageInMemoryRepo: PageInMemoryRepository){}
 
-    async netflixAuth(netflixCredentials: GetNetFlixMoviesDTO){
+    async netflixAuth(netflixCredentials: NetflixAuthDto){
 
         const { email, password, profile } = netflixCredentials;
 

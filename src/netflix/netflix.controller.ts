@@ -1,6 +1,6 @@
 import { Body, Controller, Post, HttpCode, Get } from '@nestjs/common';
 import { NetflixService } from './netflix.service';
-import { GetNetFlixMoviesDTO } from './dtos/get-netflix-movies-dto';
+import { NetflixAuthDto } from './dtos/netflix-auth-dto';
 
 @Controller('netflix')
 export class NetflixController {
@@ -9,7 +9,7 @@ export class NetflixController {
 
   @Post('/authenticate')
   @HttpCode(200)
-  async authenticate(@Body() body: GetNetFlixMoviesDTO){
+  async authenticate(@Body() body: NetflixAuthDto){
 
         await this.netflixService.authenticate(body);
 
