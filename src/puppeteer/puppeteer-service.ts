@@ -54,7 +54,7 @@ export class PuppeteerService {
 
         await page.waitForSelector('.rowTitle.ltr-0');
 
-        this.pageInMemoryRepo.add('movies',page);
+        this.pageInMemoryRepo.add('authenticated',page);
 
 
     }
