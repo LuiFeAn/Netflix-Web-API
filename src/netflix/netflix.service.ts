@@ -9,9 +9,7 @@ export class NetflixService {
 
     async authenticate(authCrededntials: GetNetFlixMoviesDTO){
 
-        const movies = await this.puppeteerService.scraping(authCrededntials);
-
-        return movies;
+        await this.puppeteerService.netflixAuth(authCrededntials);
 
     }
 
