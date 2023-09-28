@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { NetflixAuthDto } from 'src/netflix/dtos/netflix-auth-dto';
 import puppeteer from 'puppeteer';
 import { PageInMemoryRepository } from 'src/repositories/page-in-memory-repository';
@@ -49,6 +49,12 @@ export class PuppeteerService {
             }
 
         });
+
+        if( selectedProfile ){
+
+            throw new BadRequestException(`Perfil não encontrado`);
+
+        }
 
         await selectedProfile.click();
 
