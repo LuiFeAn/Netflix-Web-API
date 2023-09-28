@@ -8,7 +8,7 @@ export class MovieService {
 
     async findAll(){
 
-        const page = this.pageInMemoryRepo.get('movies');
+        const page = this.pageInMemoryRepo.get('authenticated');
 
         await page.goto('https://www.netflix.com/browse/trending-now');
 
