@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { GetNetFlixMoviesDTO } from 'src/netflix/dtos/get-netflix-movies-dto';
-import puppeteer, { ElementHandle } from 'puppeteer';
+import puppeteer from 'puppeteer';
+import { PageInMemoryRepository } from 'src/repositories/page-in-memory-repository';
 
 @Injectable()
 export class PuppeteerService {
 
-    async scraping(netflixCredentials: GetNetFlixMoviesDTO){
+    constructor(private readonly pageInMemoryRepo: PageInMemoryRepository){}
+
+    async netflixAuth(netflixCredentials: GetNetFlixMoviesDTO){
 
         const { email, password, profile } = netflixCredentials;
 
@@ -28,7 +31,7 @@ export class PuppeteerService {
         const loginButton = await page.$('.btn.login-button.btn-submit.btn-small');
 
         await loginButton.click();
-
+        
         await page.waitForSelector('.profile-name');
 
         const profiles = await page.$$('.profile-name');
@@ -51,15 +54,7 @@ export class PuppeteerService {
 
         await page.waitForSelector('.rowTitle.ltr-0');
 
-        const selectList = await page.$$('.rowTitle.ltr-0');
-
-        await selectList[0].click();
-
-        await page.waitForSelector('.galleryLockups');
-
-        const resources = await page.$$('.galleryLockups');
-
-        console.log(resources);
+        this.pageInMemoryRepo.add('movies',page);
 
 
     }
