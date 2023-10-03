@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { NetflixAuthDto } from 'src/netflix/dtos/netflix-auth-dto';
-import puppeteer from 'puppeteer';
+import puppeteer, { ElementHandle } from 'puppeteer';
 import { PageInMemoryRepository } from 'src/repositories/page-in-memory-repository';
 
 @Injectable()
@@ -31,12 +31,36 @@ export class PuppeteerService {
         const loginButton = await page.$('.btn.login-button.btn-submit.btn-small');
 
         await loginButton.click();
+
+        let credentialErr;
+
+        try{
+
+            await page.waitForSelector('.ui-message-container.ui-message-error',{
+                timeout:3000
+            });
+
+            credentialErr = true;
+
+        }catch(err){
+
+            credentialErr = false;
+
+        }
+
+        if( credentialErr ){
+
+            throw new UnauthorizedException('Email ou senha inválido(s)')
+
+        }
         
         await page.waitForSelector('.profile-name');
 
         const profiles = await page.$$('.profile-name');
 
-        const selectedProfile = profiles.find(async function(currentProfile){
+        let profileFind = false;
+
+        for await(const currentProfile of profiles){
 
             const profileText = await currentProfile.getProperty('innerHTML');
 
@@ -44,19 +68,19 @@ export class PuppeteerService {
 
             if( profileName === profile ){
 
-                return currentProfile
+                await currentProfile.click();
+
+                profileFind = true;
 
             }
 
-        });
+        }
 
-        if( selectedProfile ){
+        if( !profileFind ){
 
             throw new BadRequestException(`Perfil não encontrado`);
 
         }
-
-        await selectedProfile.click();
 
         await page.waitForSelector('.rowTitle.ltr-0');
 

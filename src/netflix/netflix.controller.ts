@@ -8,12 +8,13 @@ export class NetflixController {
   constructor(private readonly netflixService: NetflixService) {}
 
   @Post('/authenticate')
-  @HttpCode(204)
+  @HttpCode(200)
   async authenticate(@Body() body: NetflixAuthDto){
 
         await this.netflixService.authenticate(body);
 
         return {
+          statusCode:200,
           message:'Autenticado com sucesso !'
         }
 
